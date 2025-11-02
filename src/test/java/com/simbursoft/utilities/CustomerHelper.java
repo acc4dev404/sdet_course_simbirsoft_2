@@ -11,13 +11,10 @@ public final class CustomerHelper {
         if (customerNames.isEmpty()) {
             throw new IllegalArgumentException("Список клиентов не может быть пустой");
         }
-
         OptionalDouble averageOpt = customerNames.stream()
                 .mapToInt(String::length)
                 .average();
-
         double averageLength = averageOpt.getAsDouble();
-
         return customerNames.stream()
                 .min((name1, name2) -> {
                     double diff1 = Math.abs(name1.length() - averageLength);
