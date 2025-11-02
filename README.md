@@ -1,4 +1,4 @@
-# Тест-кейсы для банковского приложения 
+# Тест-кейсы для банковского приложения (Банк XYZ)
 
 ## Объект тестирования
 https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager
