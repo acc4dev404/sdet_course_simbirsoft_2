@@ -1,9 +1,9 @@
-package com.simbursoft.tests;
+package com.simbirsoft.tests;
 
-import com.simbursoft.pages.BankManagerAddCustomerPage;
-import com.simbursoft.pages.BankManagerCustomersPage;
-import com.simbursoft.utilities.CustomerHelper;
-import com.simbursoft.utilities.NameGenerator;
+import com.simbirsoft.pages.BankManagerAddCustomerPage;
+import com.simbirsoft.pages.BankManagerCustomersPage;
+import com.simbirsoft.utilities.CustomerHelper;
+import com.simbirsoft.utilities.NameGenerator;
 import io.qameta.allure.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,12 +14,20 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Тестовый класс для проверки функциональности управления клиентами в банковском приложении.
+ * Содержит тест-кейсы для создания, сортировки и удаления клиентов.
+ */
 @DisplayName("Тестирование функциональности XYZ Bank")
 @Epic("Операции по управлению клиентами")
 @Feature("Управление клиентами")
 @Execution(ExecutionMode.CONCURRENT)
 public class BankManagerTest extends BaseTest {
 
+    /**
+     * Тест создания клиента с валидными данными.
+     * Проверяет успешное создание клиента и его отображение в списке.
+     */
     @Test
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Создание клиента с валидными данными")
@@ -47,6 +55,10 @@ public class BankManagerTest extends BaseTest {
                 .isTrue();
     }
 
+    /**
+     * Тест сортировки клиентов по имени.
+     * Проверяет корректность алфавитной сортировки клиентов.
+     */
     @Test
     @Severity(SeverityLevel.NORMAL)
     @DisplayName("Сортировка клиентов по имени")
@@ -67,10 +79,15 @@ public class BankManagerTest extends BaseTest {
                 .isEqualTo(expectedSortedNames);
     }
 
+    /**
+     * Тест удаления клиента по средней длине имени.
+     * Если несколько клиентов имеют одинаковую близость к средней длине, удаляет всех подходящих.
+     */
     @Test
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Удаление клиента по средней длине имени")
-    @Description("Тест проверяет удаление клиента, чье имя имеет длину, наиболее близкую к средней")
+    @Description("Тест проверяет удаление клиента, чье имя имеет длину, наиболее близкую к средней. " +
+            "Если таких клиентов несколько, удаляются все подходящие.")
     @Story("Пользователь может удалить клиента по алгоритму из задания")
     void deleteCustomerByAverageNameLength() {
         BankManagerCustomersPage bankManagerCustomersPage = new BankManagerCustomersPage(driver, waiter);
@@ -81,17 +98,20 @@ public class BankManagerTest extends BaseTest {
             Allure.label("testrail", "skip");
             return;
         }
-        String customerToDelete = CustomerHelper.findCustomerToDelete(customerNames);
+        List<String> customersToDelete = CustomerHelper.findCustomersToDelete(customerNames);
         int initialCount = bankManagerCustomersPage.getCustomerCount();
-        bankManagerCustomersPage.deleteCustomer(customerToDelete);
-        boolean isCustomerStillPresent = bankManagerCustomersPage.isCustomerPresent(customerToDelete);
+        for (String customerToDelete : customersToDelete) {
+            bankManagerCustomersPage.deleteCustomer(customerToDelete);
+        }
+        for (String customerToDelete : customersToDelete) {
+            boolean isCustomerStillPresent = bankManagerCustomersPage.isCustomerPresent(customerToDelete);
+            assertThat(isCustomerStillPresent)
+                    .as("Клиент '%s' должен быть удален из таблицы", customerToDelete)
+                    .isFalse();
+        }
         int finalCount = bankManagerCustomersPage.getCustomerCount();
-        assertThat(isCustomerStillPresent)
-                .as("Клиент '%s' должен быть удален из таблицы", customerToDelete)
-                .isFalse();
         assertThat(finalCount)
-                .as("Количество клиентов должно уменьшиться на 1")
-                .isEqualTo(initialCount - 1);
+                .as("Количество клиентов должно уменьшиться на " + customersToDelete.size())
+                .isEqualTo(initialCount - customersToDelete.size());
     }
-
 }
