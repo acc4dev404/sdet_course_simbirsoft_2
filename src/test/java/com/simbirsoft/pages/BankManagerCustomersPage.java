@@ -92,14 +92,13 @@ public class BankManagerCustomersPage extends BasePage {
 
     /**
      * Выполняет сортировку клиентов по имени.
-     * Двойной клик по заголовку для обеспечения сортировки по убыванию.
      */
     @Step("Сортировка по имени клиента")
-    public void sortByFirstName() {
+    public BankManagerCustomersPage clickSortByFirstName() {
         waiter.untilDisplayed(customerTable);
         waiter.untilClickable(tableHeaders.get(0));
         tableHeaders.get(0).click();
-        tableHeaders.get(0).click();
+        return this;
     }
 
     /**
@@ -107,7 +106,7 @@ public class BankManagerCustomersPage extends BasePage {
      *
      * @param customerName имя клиента для удаления
      */
-    @Step("Удаление клиента: {customerName}")
+    @Step("Удаление клиента: [{customerName}]")
     public void deleteCustomer(String customerName) {
         List<String> names = getAllCustomerNames();
         for (int i = 0; i < names.size(); i++) {

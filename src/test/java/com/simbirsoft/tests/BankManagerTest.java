@@ -69,7 +69,8 @@ public class BankManagerTest extends BaseTest {
         bankManagerCustomersPage
                 .clickCustomers();
         List<String> namesBeforeSort = bankManagerCustomersPage.getAllCustomerNames();
-        bankManagerCustomersPage.sortByFirstName();
+        bankManagerCustomersPage.clickSortByFirstName();
+        bankManagerCustomersPage.clickSortByFirstName();
         List<String> namesAfterSort = bankManagerCustomersPage.getAllCustomerNames();
         List<String> expectedSortedNames = namesBeforeSort.stream()
                 .sorted()
