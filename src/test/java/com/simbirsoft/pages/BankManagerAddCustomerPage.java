@@ -35,7 +35,7 @@ public class BankManagerAddCustomerPage extends BasePage {
     private WebElement postCodeInput;
 
     /** Кнопка отправки формы */
-    @FindBy(xpath = "//button[@type='submit'][contains(text(), 'Add Customer')]")
+    @FindBy(xpath = "//button[.='Add Customer']")
     private WebElement submitButton;
 
     /** Кнопка перехода к списку клиентов */
@@ -183,5 +183,4 @@ public class BankManagerAddCustomerPage extends BasePage {
                 .filter(name -> !name.isEmpty())
                 .collect(Collectors.toList());
     }
-
 }
