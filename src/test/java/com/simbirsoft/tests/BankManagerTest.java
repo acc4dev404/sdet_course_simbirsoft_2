@@ -4,6 +4,7 @@ import com.simbirsoft.pages.BankManagerAddCustomerPage;
 import com.simbirsoft.pages.BankManagerCustomersPage;
 import com.simbirsoft.utilities.CustomerHelper;
 import com.simbirsoft.utilities.NameGenerator;
+import com.simbirsoft.utilities.ParameterProvider;
 import io.qameta.allure.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,7 @@ public class BankManagerTest extends BaseTest {
         String alertText = bankManagerAddCustomerPage.getAlertText();
         assertThat(alertText)
                 .as("Alert должен содержать сообщение об успешном создании клиента")
-                .contains("Customer added successfully with customer id");
+                .contains(ParameterProvider.get("alert.successMessageForCustomerAdded"));
         bankManagerAddCustomerPage.clickCustomers();
         boolean isCustomerPresent = bankManagerAddCustomerPage.isCustomerPresent(firstName);
         assertThat(isCustomerPresent)
@@ -89,16 +90,12 @@ public class BankManagerTest extends BaseTest {
     @DisplayName("Удаление клиента по средней длине имени")
     @Description("Тест проверяет удаление клиента, чье имя имеет длину, наиболее близкую к средней. " +
             "Если таких клиентов несколько, удаляются все подходящие.")
-    @Story("Пользователь может удалить клиента по алгоритму из задания")
+    @Story("Пользователь может удалить всех клиентов, чье имя имеет длину, наиболее близкую к средней")
     void deleteCustomerByAverageNameLength() {
         BankManagerCustomersPage bankManagerCustomersPage = new BankManagerCustomersPage(driver, waiter);
         bankManagerCustomersPage
                 .clickCustomers();
         List<String> customerNames = bankManagerCustomersPage.getAllCustomerNames();
-        if (customerNames.isEmpty()) {
-            Allure.label("testrail", "skip");
-            return;
-        }
         List<String> customersToDelete = CustomerHelper.findCustomersToDelete(customerNames);
         int initialCount = bankManagerCustomersPage.getCustomerCount();
         for (String customerToDelete : customersToDelete) {
