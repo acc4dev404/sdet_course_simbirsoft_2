@@ -1,11 +1,20 @@
-package com.simbursoft.utilities;
+package com.simbirsoft.utilities;
 
 import java.util.Random;
 
+/**
+ * Генератор случайных имен и почтовых кодов для тестовых данных.
+ * Предоставляет методы для создания уникальных тестовых данных.
+ */
 public final class NameGenerator {
 
     private NameGenerator() {}
 
+    /**
+     * Генерирует случайное имя длиной 5 символов из букв и цифр.
+     *
+     * @return сгенерированное имя
+     */
     public static String generateName() {
         int length = 5;
         Random random = new Random();
@@ -16,6 +25,13 @@ public final class NameGenerator {
                 .toString();
     }
 
+    /**
+     * Генерирует имя на основе почтового кода.
+     * Преобразует пары цифр из почтового кода в буквы.
+     *
+     * @param postCode почтовый код для генерации имени
+     * @return сгенерированное имя
+     */
     public static String generateNameFromPostCode(String postCode) {
         StringBuilder name = new StringBuilder();
         for (int i = 0; i < postCode.length(); i += 2) {
@@ -29,6 +45,11 @@ public final class NameGenerator {
         return name.toString();
     }
 
+    /**
+     * Генерирует случайный 10-значный почтовый код.
+     *
+     * @return сгенерированный почтовый код
+     */
     public static String generateRandomPostCode() {
         StringBuilder postCode = new StringBuilder();
         for (int i = 0; i < 10; i++) {
